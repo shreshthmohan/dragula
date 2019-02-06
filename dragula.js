@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-var emitter = require("contra/emitter");
-var crossvent = require("crossvent");
-var classes = require("./classes");
+var emitter = require('contra/emitter');
+var crossvent = require('crossvent');
+var classes = require('./classes');
 var doc = document;
 var documentElement = doc.documentElement;
 
@@ -55,7 +55,7 @@ function dragula(initialContainers, options) {
     o.removeOnSpill = false;
   }
   if (o.direction === void 0) {
-    o.direction = "vertical";
+    o.direction = 'vertical';
   }
   if (o.ignoreInputTextSelection === void 0) {
     o.ignoreInputTextSelection = true;
@@ -79,7 +79,7 @@ function dragula(initialContainers, options) {
   });
 
   if (o.removeOnSpill === true) {
-    drake.on("over", spillOver).on("out", spillOut);
+    drake.on('over', spillOver).on('out', spillOut);
   }
 
   events();
@@ -91,20 +91,20 @@ function dragula(initialContainers, options) {
   }
 
   function events(remove) {
-    var op = remove ? "remove" : "add";
-    touchy(documentElement, op, "mousedown", grab);
-    touchy(documentElement, op, "mouseup", release);
+    var op = remove ? 'remove' : 'add';
+    touchy(documentElement, op, 'mousedown', grab);
+    touchy(documentElement, op, 'mouseup', release);
   }
 
   function eventualMovements(remove) {
-    var op = remove ? "remove" : "add";
-    touchy(documentElement, op, "mousemove", startBecauseMouseMoved);
+    var op = remove ? 'remove' : 'add';
+    touchy(documentElement, op, 'mousemove', startBecauseMouseMoved);
   }
 
   function movements(remove) {
-    var op = remove ? "remove" : "add";
-    crossvent[op](documentElement, "selectstart", preventGrabbed); // IE8
-    crossvent[op](documentElement, "click", preventGrabbed);
+    var op = remove ? 'remove' : 'add';
+    crossvent[op](documentElement, 'selectstart', preventGrabbed); // IE8
+    crossvent[op](documentElement, 'click', preventGrabbed);
   }
 
   function destroy() {
@@ -133,7 +133,7 @@ function dragula(initialContainers, options) {
     }
     _grabbed = context;
     eventualMovements();
-    if (e.type === "mousedown") {
+    if (e.type === 'mousedown') {
       if (isInput(item)) {
         // see also: https://github.com/bevacqua/dragula/issues/208
         item.focus(); // fixes https://github.com/bevacqua/dragula/issues/176
@@ -161,8 +161,8 @@ function dragula(initialContainers, options) {
       return;
     }
     if (o.ignoreInputTextSelection) {
-      var clientX = getCoord("clientX", e);
-      var clientY = getCoord("clientY", e);
+      var clientX = getCoord('clientX', e);
+      var clientY = getCoord('clientY', e);
       var elementBehindCursor = doc.elementFromPoint(clientX, clientY);
       if (isInput(elementBehindCursor)) {
         return;
@@ -176,10 +176,10 @@ function dragula(initialContainers, options) {
     start(grabbed);
 
     var offset = getOffset(_item);
-    _offsetX = getCoord("pageX", e) - offset.left;
-    _offsetY = getCoord("pageY", e) - offset.top;
+    _offsetX = getCoord('pageX', e) - offset.left;
+    _offsetY = getCoord('pageY', e) - offset.top;
 
-    classes.add(_copy || _item, "gu-transit");
+    classes.add(_copy || _item, 'gu-transit');
     renderMirrorImage();
     drag(e);
   }
@@ -234,7 +234,7 @@ function dragula(initialContainers, options) {
   function start(context) {
     if (isCopy(context.item, context.source)) {
       _copy = context.item.cloneNode(true);
-      drake.emit("cloned", _copy, context.item, "copy");
+      drake.emit('cloned', _copy, context.item, 'copy');
     }
 
     _source = context.source;
@@ -242,7 +242,7 @@ function dragula(initialContainers, options) {
     _initialSibling = _currentSibling = nextEl(context.item);
 
     drake.dragging = true;
-    drake.emit("drag", _item, _source);
+    drake.emit('drag', _item, _source);
   }
 
   function invalidTarget() {
@@ -270,8 +270,8 @@ function dragula(initialContainers, options) {
       return;
     }
     var item = _copy || _item;
-    var clientX = getCoord("clientX", e);
-    var clientY = getCoord("clientY", e);
+    var clientX = getCoord('clientX', e);
+    var clientY = getCoord('clientY', e);
     var elementBehindCursor = getElementBehindPoint(_mirror, clientX, clientY);
     var dropTarget = findDropTarget(elementBehindCursor, clientX, clientY);
     if (
@@ -292,9 +292,9 @@ function dragula(initialContainers, options) {
       parent.removeChild(_item);
     }
     if (isInitialPlacement(target)) {
-      drake.emit("cancel", item, _source, _source);
+      drake.emit('cancel', item, _source, _source);
     } else {
-      drake.emit("drop", item, target, _source, _currentSibling);
+      drake.emit('drop', item, target, _source, _currentSibling);
     }
     cleanup();
   }
@@ -308,7 +308,7 @@ function dragula(initialContainers, options) {
     if (parent) {
       parent.removeChild(item);
     }
-    drake.emit(_copy ? "cancel" : "remove", item, parent, _source);
+    drake.emit(_copy ? 'cancel' : 'remove', item, parent, _source);
     cleanup();
   }
 
@@ -330,9 +330,9 @@ function dragula(initialContainers, options) {
       }
     }
     if (initial || reverts) {
-      drake.emit("cancel", item, _source, _source);
+      drake.emit('cancel', item, _source, _source);
     } else {
-      drake.emit("drop", item, parent, _source, _currentSibling);
+      drake.emit('drop', item, parent, _source, _currentSibling);
     }
     cleanup();
   }
@@ -342,16 +342,16 @@ function dragula(initialContainers, options) {
     ungrab();
     removeMirrorImage();
     if (item) {
-      classes.rm(item, "gu-transit");
+      classes.rm(item, 'gu-transit');
     }
     if (_renderTimer) {
       clearTimeout(_renderTimer);
     }
     drake.dragging = false;
     if (_lastDropTarget) {
-      drake.emit("out", item, _lastDropTarget, _source);
+      drake.emit('out', item, _lastDropTarget, _source);
     }
-    drake.emit("dragend", item);
+    drake.emit('dragend', item);
     _source = _item = _copy = _initialSibling = _currentSibling = _renderTimer = _lastDropTarget = null;
   }
 
@@ -396,13 +396,13 @@ function dragula(initialContainers, options) {
     }
     e.preventDefault();
 
-    var clientX = getCoord("clientX", e);
-    var clientY = getCoord("clientY", e);
+    var clientX = getCoord('clientX', e);
+    var clientY = getCoord('clientY', e);
     var x = clientX - _offsetX;
     var y = clientY - _offsetY;
 
-    _mirror.style.left = x + "px";
-    _mirror.style.top = y + "px";
+    _mirror.style.left = x + 'px';
+    _mirror.style.top = y + 'px';
 
     var item = _copy || _item;
     var elementBehindCursor = getElementBehindPoint(_mirror, clientX, clientY);
@@ -479,30 +479,30 @@ function dragula(initialContainers, options) {
         animate(moverRect, mover, o.animation);
         animate(itemRect, item, o.animation);
       }
-      drake.emit("shadow", item, dropTarget, _source);
+      drake.emit('shadow', item, dropTarget, _source);
     }
     function moved(type) {
       drake.emit(type, item, _lastDropTarget, _source);
     }
     function over() {
       if (changed) {
-        moved("over");
+        moved('over');
       }
     }
     function out() {
       if (_lastDropTarget) {
-        moved("out");
+        moved('out');
       }
     }
   }
 
   function spillOver(el) {
-    classes.rm(el, "gu-hide");
+    classes.rm(el, 'gu-hide');
   }
 
   function spillOut(el) {
     if (drake.dragging) {
-      classes.add(el, "gu-hide");
+      classes.add(el, 'gu-hide');
     }
   }
 
@@ -512,20 +512,20 @@ function dragula(initialContainers, options) {
     }
     var rect = _item.getBoundingClientRect();
     _mirror = _item.cloneNode(true);
-    _mirror.style.width = getRectWidth(rect) + "px";
-    _mirror.style.height = getRectHeight(rect) + "px";
-    classes.rm(_mirror, "gu-transit");
-    classes.add(_mirror, "gu-mirror");
+    _mirror.style.width = getRectWidth(rect) + 'px';
+    _mirror.style.height = getRectHeight(rect) + 'px';
+    classes.rm(_mirror, 'gu-transit');
+    classes.add(_mirror, 'gu-mirror');
     o.mirrorContainer.appendChild(_mirror);
-    touchy(documentElement, "add", "mousemove", drag);
-    classes.add(o.mirrorContainer, "gu-unselectable");
-    drake.emit("cloned", _mirror, _item, "mirror");
+    touchy(documentElement, 'add', 'mousemove', drag);
+    classes.add(o.mirrorContainer, 'gu-unselectable');
+    drake.emit('cloned', _mirror, _item, 'mirror');
   }
 
   function removeMirrorImage() {
     if (_mirror) {
-      classes.rm(o.mirrorContainer, "gu-unselectable");
-      touchy(documentElement, "remove", "mousemove", drag);
+      classes.rm(o.mirrorContainer, 'gu-unselectable');
+      touchy(documentElement, 'remove', 'mousemove', drag);
       getParent(_mirror).removeChild(_mirror);
       _mirror = null;
     }
@@ -543,7 +543,7 @@ function dragula(initialContainers, options) {
   }
 
   function getReference(dropTarget, target, x, y) {
-    var horizontal = o.direction === "horizontal";
+    var horizontal = o.direction === 'horizontal';
     var reference = target !== dropTarget ? inside() : outside();
     return reference;
 
@@ -581,25 +581,25 @@ function dragula(initialContainers, options) {
   }
 
   function isCopy(item, container) {
-    return typeof o.copy === "boolean" ? o.copy : o.copy(item, container);
+    return typeof o.copy === 'boolean' ? o.copy : o.copy(item, container);
   }
 }
 
 function touchy(el, op, type, fn) {
   var touch = {
-    mouseup: "touchend",
-    mousedown: "touchstart",
-    mousemove: "touchmove"
+    mouseup: 'touchend',
+    mousedown: 'touchstart',
+    mousemove: 'touchmove'
   };
   var pointers = {
-    mouseup: "pointerup",
-    mousedown: "pointerdown",
-    mousemove: "pointermove"
+    mouseup: 'pointerup',
+    mousedown: 'pointerdown',
+    mousemove: 'pointermove'
   };
   var microsoft = {
-    mouseup: "MSPointerUp",
-    mousedown: "MSPointerDown",
-    mousemove: "MSPointerMove"
+    mouseup: 'MSPointerUp',
+    mousedown: 'MSPointerDown',
+    mousemove: 'MSPointerMove'
   };
   if (global.navigator.pointerEnabled) {
     crossvent[op](el, pointers[type], fn);
@@ -631,13 +631,13 @@ function whichMouseButton(e) {
 function getOffset(el) {
   var rect = el.getBoundingClientRect();
   return {
-    left: rect.left + getScroll("scrollLeft", "pageXOffset"),
-    top: rect.top + getScroll("scrollTop", "pageYOffset")
+    left: rect.left + getScroll('scrollLeft', 'pageXOffset'),
+    top: rect.top + getScroll('scrollTop', 'pageYOffset')
   };
 }
 
 function getScroll(scrollProp, offsetProp) {
-  if (typeof global[offsetProp] !== "undefined") {
+  if (typeof global[offsetProp] !== 'undefined') {
     return global[offsetProp];
   }
   if (documentElement.clientHeight) {
@@ -650,7 +650,7 @@ function getElementBehindPoint(point, x, y) {
   var p = point || {};
   var state = p.className;
   var el;
-  p.className += " gu-hide";
+  p.className += ' gu-hide';
   el = doc.elementFromPoint(x, y);
   p.className = state;
   return el;
@@ -673,9 +673,9 @@ function getParent(el) {
 }
 function isInput(el) {
   return (
-    el.tagName === "INPUT" ||
-    el.tagName === "TEXTAREA" ||
-    el.tagName === "SELECT" ||
+    el.tagName === 'INPUT' ||
+    el.tagName === 'TEXTAREA' ||
+    el.tagName === 'SELECT' ||
     isEditable(el)
   );
 }
@@ -683,10 +683,10 @@ function isEditable(el) {
   if (!el) {
     return false;
   } // no parents were editable
-  if (el.contentEditable === "false") {
+  if (el.contentEditable === 'false') {
     return false;
   } // stop the lookup
-  if (el.contentEditable === "true") {
+  if (el.contentEditable === 'true') {
     return true;
   } // found a contentEditable element in the chain
   return isEditable(getParent(el)); // contentEditable is set to 'inherit'
@@ -717,20 +717,20 @@ function previousEl(el) {
 function animate(prevRect, target, time) {
   if (time) {
     var currentRect = target.getBoundingClientRect();
-    target.style.transition = "none";
+    target.style.transition = 'none';
     target.style.transform =
-      "translate3d(" +
+      'translate3d(' +
       (prevRect.left - currentRect.left) +
-      "px," +
+      'px,' +
       (prevRect.top - currentRect.top) +
-      "px,0)";
+      'px,0)';
     target.offsetWidth; // repaint
-    target.style.transition = "all " + time + "ms";
-    target.style.transform = "translate3d(0,0,0)";
+    target.style.transition = 'all ' + time + 'ms';
+    target.style.transform = 'translate3d(0,0,0)';
     clearTimeout(target.animated);
-    target.animated = setTimeout(function() {
-      target.style.transition = "";
-      target.style.transform = "";
+    target.animated = setTimeout(function () {
+      target.style.transition = '';
+      target.style.transform = '';
       target.animated = false;
     }, time);
   }
@@ -752,8 +752,8 @@ function getEventHost(e) {
 function getCoord(coord, e) {
   var host = getEventHost(e);
   var missMap = {
-    pageX: "clientX", // IE8
-    pageY: "clientY" // IE8
+    pageX: 'clientX', // IE8
+    pageY: 'clientY' // IE8
   };
   if (coord in missMap && !(coord in host) && missMap[coord] in host) {
     coord = missMap[coord];
